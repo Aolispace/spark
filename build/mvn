@@ -121,14 +121,21 @@ fi
 
 # Install Maven if necessary
 MVN_BIN="$(command -v mvn)"
+ZINC_BIN="$(command -v zinc)"
+SCALA_BIN="$(command -v scala)"
 
 if [ ! "$MVN_BIN" -o -n "$FORCE_MVN" ]; then
   install_mvn
 fi
 
 # Install the proper version of Scala and Zinc for the build
-install_zinc
-install_scala
+if [ ! "$ZINC_BIN" ]; then
+  install_zinc
+fi
+
+if [ ! "$SCALA_BIN" -o ! "$SCALA_COMPILER" -o ! "$SCALA_LIBRARY" ]; then
+  install_scala
+fi
 
 # Reset the current working directory
 cd "${_CALLING_DIR}"
